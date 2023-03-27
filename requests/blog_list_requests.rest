@@ -1,8 +1,8 @@
 ### Request Bloglist
-GET http://localhost:3003/api/blogs
+GET http://localhost:8080/api/blogs
 
 ### Post new blog
-POST http://localhost:3003/api/blogs
+POST http://localhost:8080/api/blogs
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhuZDAxIiwiaWQiOiI2M2FkOGY2NmNhYTZmNmFmMDVlYjJiMTEiLCJpYXQiOjE2NzI0MTAyMjgsImV4cCI6MTY3MjQxMzgyOH0.Wnk-Ec0r-zKatYdrteM2o14iC1s28D-8XBzTl5Jko18
 
@@ -15,7 +15,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pb
 }
 
 ### Post comment
-POST http://localhost:3003/api/blogs/63b8255a48ffc6db9dfb6a69/comments
+POST http://localhost:8080/api/blogs/63b8255a48ffc6db9dfb6a69/comments
 Content-Type:  application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type:  application/json
 }
 
 ### Post an invalid blog
-POST http://localhost:3003/api/blogs
+POST http://localhost:8080/api/blogs
 Content-Type: application/json
 
 {
@@ -32,11 +32,11 @@ Content-Type: application/json
 }
 
 ### Delete a blog
-DELETE http://localhost:3003/api/blogs/63ac4612fdc34562c411de9a
+DELETE http://localhost:8080/api/blogs/63ac4612fdc34562c411de9a
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1pbmhuZDAxIiwiaWQiOiI2M2FkOGY2NmNhYTZmNmFmMDVlYjJiMTEiLCJpYXQiOjE2NzI0MTAyMjgsImV4cCI6MTY3MjQxMzgyOH0.Wnk-Ec0r-zKatYdrteM2o14iC1s28D-8XBzTl5Jko18
 
 ### Update a blog
-PUT http://localhost:3003/api/blogs/63ad0191671c1cf4b1f1f83d
+PUT http://localhost:8080/api/blogs/63ad0191671c1cf4b1f1f83d
 Content-Type: application/json
 
 {

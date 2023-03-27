@@ -1,0 +1,94 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+    - master
+    - main
+  pull_request:
+    branches: [master, main]
+    types: [opened, synchronize]
+
+env:  
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+  SECRET: ${{ secrets.SECRET }}
+  PORT: ${{ secrets.PORT }}
+
+jobs:
+  simple_deployment_pipeline:
+    name: Build & test app
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Debug env
+        run: echo $TEST_MONGODB_URI && echo $POST && echo $MONGODB_URI && echo $SECRET
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: '0'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: npm install
+        run: npm install
+      - name: lint
+        run: npm run lint
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
+      - name: e2e tests
+        uses: cypress-io/github-action@v5
+        id: teste2e
+        with:
+          command: npm run test:e2e
+          start: npm run start
+          wait-on: http://localhost:8080
+      - name: Test Success
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: ${{ success() && steps.teste2e.conclusion == 'success' }}
+        with:
+          severity: info
+          details: Test Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Failure
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: ${{ failure() }}
+        with:
+          severity: error
+          details: Test Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Cancelled
+        uses: rjstone/discord-webhook-notify@v1.0.4
+        if: ${{ cancelled() }}
+        with:
+          severity: warn
+          details: Test Cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    if: ((github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop') || github.event_name == 'push')
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.14.2'
+      - name: npm install
+        run: npm install
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  tag_release:
+    needs: [simple_deployment_pipeline, deploy]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true

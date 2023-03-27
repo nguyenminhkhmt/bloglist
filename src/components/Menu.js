@@ -1,3 +1,4 @@
+import React from 'react'
 import { connect } from 'react-redux'
 import { logout } from '../reducers/userReducer'
 import { Nav, Dropdown, ButtonGroup, Button } from 'react-bootstrap'

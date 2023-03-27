@@ -1,8 +1,8 @@
 ### Request Users
-GET http://localhost:3003/api/users
+GET http://localhost:8080/api/users
 
 ### Create a new user
-POST http://localhost:3003/api/users
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Create an invalid user
-POST http://localhost:3003/api/users
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -21,10 +21,10 @@ Content-Type: application/json
 }
 
 ### Delete a user
-DELETE http://localhost:3003/api/users/63adfe6e7b40f0f1814541a5
+DELETE http://localhost:8080/api/users/63adfe6e7b40f0f1814541a5
 
 ### Update a user
-PUT http://localhost:3003/api/users/63adff4310c9fdb614e76602
+PUT http://localhost:8080/api/users/63adff4310c9fdb614e76602
 Content-Type: application/json
 
 {
