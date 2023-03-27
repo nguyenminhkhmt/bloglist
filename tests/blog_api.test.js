@@ -2,12 +2,20 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const bcrypt = require('bcryptjs')
+const User = require('../src/models/user')
 const Blog = require('../src/models/blog')
 const helper = require('./test_helper')
 
 let token = ''
 let userId = ''
 beforeEach(async () => {
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('12345678', 10)
+  const user = new User({ username: 'root', passwordHash })
+  await user.save()
+
   const loginParams = {
     username: 'root',
     password: '12345678'
