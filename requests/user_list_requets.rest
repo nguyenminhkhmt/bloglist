@@ -1,3 +1,6 @@
+### Reset all
+POST http://localhost:8080/api/testing/reset
+
 ### Request Users
 GET http://localhost:8080/api/users
 
