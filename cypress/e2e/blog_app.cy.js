@@ -26,7 +26,7 @@ describe('Blog app', function () {
   describe('Login', function () {
     it('succeeds with correct credentials', function () {
       cy.login({ username: 'minhnd01', password: '12345678' })
-      cy.get('html').should('contain', 'Duc Minh Nguyen logged-in')
+      cy.get('html').should('contain', 'Duc Minh Nguyen')
     })
 
     it('fails with wrong credentials', function () {
@@ -36,11 +36,8 @@ describe('Blog app', function () {
       cy.get('#login-button').click()
 
       // Check message is red!
-      cy.get('.message').should('contain', 'Wrong credentials')
-        .and('have.css', 'color', 'rgb(255, 0, 0)')
-        .and('have.css', 'border-style', 'solid')
-
-      cy.get('html').should('not.contain', 'Duc Minh Nguyen logged in')
+      cy.get('.alert-failed').should('contain', 'Wrong credentials')
+      cy.get('html').should('not.contain', 'Duc Minh Nguyen')
     })
   })
 
@@ -70,23 +67,21 @@ describe('Blog app', function () {
       })
 
       it('it can be liked', function () {
-        cy.contains('another blog title created by cypress by MM')
-          .contains('view').click()
+        cy.contains('another blog title created by cypress by MM').click()
         cy.get('#blog-like').click()
-        cy.get('html').should('contain', 'likes 1')
+        cy.get('html').should('contain', 'likes:')
+        cy.get('html').should('contain', '1')
       })
 
       it('it can be deleted', function () {
-        cy.contains('another blog title created by cypress by MM')
-          .contains('view').click()
+        cy.contains('another blog title created by cypress by MM').click()
         cy.get('#blog-delete').click()
-        cy.get('html').should('contain', 'another blog title created by cypress is deleted!')
+        cy.get('html').should('contain', 'another blog title created by cypress by MM is deleted')
       })
 
       it('it can\'t be deleted without owner', function () {
         cy.login({ username: 'michael01', password: '12345678' })
-        cy.contains('another blog title created by cypress by MM')
-          .contains('view').click()
+        cy.contains('another blog title created by cypress by MM').click()
         cy.get('#blog-delete').click()
         cy.get('html').should('contain', 'another blog title created by cypress')
         cy.get('html').should('contain', 'Request failed')
